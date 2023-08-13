@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 import { nanoid } from '@reduxjs/toolkit';
-import { addContact } from "../../redux/slice";
+import { addContact } from '../../redux/operations';
 import { getContacts } from '../../redux/selectors';
 import { FormBody, Label, Input, AddContactBtn } from './Form.styled';
 
-const Form = () =>  {
+const Form = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
@@ -13,8 +13,8 @@ const Form = () =>  {
   const contactsStorage = useSelector(getContacts);
 
   const addNewContact = (id, name, number) => {
-    const isContactExist = contactsStorage.some(contact =>
-      contact.name && contact.name.toLowerCase() === name.toLowerCase()
+    const isContactExist = contactsStorage.some(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
     );
 
     if (!isContactExist) {
