@@ -1,11 +1,10 @@
-import  Container  from './Container/Container';
-import  Section  from './Section/Section';
+import Container from './Container/Container';
+import Section from './Section/Section';
 import Form from './Form/Form';
 import Contact from './Contact/Contact';
 import Filter from './Filter/Filter';
 
 const App = () => {
- 
   return (
     <>
       <Container>
@@ -14,7 +13,7 @@ const App = () => {
         </Section>
         <Section title={'Contacts'}>
           <Filter />
-         <Contact/>
+          <Contact />
         </Section>
       </Container>
     </>
