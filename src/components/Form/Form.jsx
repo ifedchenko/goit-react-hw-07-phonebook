@@ -18,7 +18,7 @@ const Form = () => {
     );
 
     if (!isContactExist) {
-      dispatch(addContact({ id, name, number }));
+      dispatch(addContact({ id, name, phone: number }));
       setName('');
       setNumber('');
     } else {
