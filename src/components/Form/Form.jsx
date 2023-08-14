@@ -7,20 +7,20 @@ import { FormBody, Label, Input, AddContactBtn } from './Form.styled';
 
 const Form = () => {
   const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+  const [phone, setPhone] = useState('');
 
   const dispatch = useDispatch();
   const contactsStorage = useSelector(getContacts);
 
-  const addNewContact = (id, name, number) => {
+  const addNewContact = (id, name, phone) => {
     const isContactExist = contactsStorage.some(
       contact => contact.name.toLowerCase() === name.toLowerCase()
     );
 
     if (!isContactExist) {
-      dispatch(addContact({ id, name, phone: number }));
+      dispatch(addContact({ id, name, phone }));
       setName('');
-      setNumber('');
+      setPhone('');
     } else {
       alert(`This ${name} already exists!`);
     }
@@ -29,7 +29,7 @@ const Form = () => {
   const submitHandler = evt => {
     evt.preventDefault();
     const id = nanoid();
-    addNewContact(id, name, number);
+    addNewContact(id, name, phone);
   };
 
   const onInputChange = evt => {
@@ -37,7 +37,7 @@ const Form = () => {
     if (name === 'name') {
       setName(value);
     } else if (name === 'number') {
-      setNumber(value);
+      setPhone(value);
     }
   };
 
@@ -60,7 +60,7 @@ const Form = () => {
         <Input
           type="tel"
           name="number"
-          value={number.trim()}
+          value={phone.trim()}
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
           onChange={onInputChange}
