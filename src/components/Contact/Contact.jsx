@@ -24,10 +24,10 @@ const Contact = () => {
           .filter(contact =>
             contact.name.toLowerCase().includes(filter.toLowerCase())
           )
-          .map(({ id, name, number }) => (
+          .map(({ id, name, phone }) => (
             <ListItem key={id}>
               <P>
-                {name}: {number}
+                {name}: {phone}
                 <DeleteButton
                   type="button"
                   onClick={() => handleDeleteContact(id)}
