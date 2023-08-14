@@ -2,7 +2,8 @@ import styled from 'styled-components';
 
 export const DeleteButton = styled.button`
   cursor: pointer;
-  margin-left: 15px;
+  ${'' /* margin-left: 15px; */}
+  width: 70px;
 `;
 export const List = styled.ul`
   padding-left: 15px;

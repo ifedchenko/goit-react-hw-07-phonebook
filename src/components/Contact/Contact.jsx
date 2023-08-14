@@ -1,36 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Notiflix from 'notiflix';
 import { deleteContact, fetchContacts } from '../../redux/operations';
 import { getContacts, getFilter } from '../../redux/selectors';
 import { DeleteButton, List, ListItem, P } from './Contact.styled';
-import Loader from 'components/Loader/Loader';
+import { Loader, DeleteButtonLoader } from 'components/Loader/Loader';
 
 const Contact = () => {
-  const [isLoaderShown, setIsLoaderShown] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isPageDidMount, setIsPageDidMount] = useState(false);
   const dispatch = useDispatch();
   const contacts = useSelector(getContacts);
   const filter = useSelector(getFilter);
 
   useEffect(() => {
-    setIsLoaderShown(true);
+    setIsPageDidMount(true);
     dispatch(fetchContacts())
       .then(() => {
-        setIsLoaderShown(false);
+        setIsPageDidMount(false);
       })
       .catch(error => {
         console.error('Error fetching contacts:', error);
-        setIsLoaderShown(false);
+        setIsPageDidMount(false);
       });
   }, [dispatch]);
 
   const handleDeleteContact = id => {
-    dispatch(deleteContact(id));
+    setIsLoading(prevState => ({ ...prevState, [id]: true }));
+    dispatch(deleteContact(id))
+      .then(() => {
+        setIsLoading(prevState => ({ ...prevState, [id]: false }));
+        Notiflix.Notify.success('Contact deleted');
+      })
+      .catch(error => {
+        setIsLoading(prevState => ({ ...prevState, [id]: false }));
+        console.error('Error deleting contact:', error);
+        Notiflix.Notify.failure('Failed to delete contact');
+      });
   };
 
   return (
     <>
-      {isLoaderShown ? (
-        <Loader /> // Render the loader if isLoaderShown is true
+      {isPageDidMount ? (
+        <Loader />
       ) : (
         <List>
           {contacts
@@ -45,7 +57,7 @@ const Contact = () => {
                     type="button"
                     onClick={() => handleDeleteContact(id)}
                   >
-                    Delete
+                    {isLoading[id] ? <DeleteButtonLoader /> : 'Delete'}
                   </DeleteButton>
                 </P>
               </ListItem>

@@ -1,28 +1,35 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { nanoid } from '@reduxjs/toolkit';
+import { nanoid } from 'nanoid';
+import Notiflix from 'notiflix';
 import { addContact } from '../../redux/operations';
 import { getContacts } from '../../redux/selectors';
 import { FormBody, Label, Input, AddContactBtn } from './Form.styled';
+import { AddButtonLoader } from 'components/Loader/Loader';
 
 const Form = () => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const contactsStorage = useSelector(getContacts);
 
   const addNewContact = (id, name, phone) => {
+    setIsLoading(true);
     const isContactExist = contactsStorage.some(
       contact => contact.name.toLowerCase() === name.toLowerCase()
     );
-
     if (!isContactExist) {
       dispatch(addContact({ id, name, phone }));
-      setName('');
-      setPhone('');
+      Notiflix.Notify.success(`You added contact wit name "${name}"`);
+      setIsLoading(false);
+
+      return;
     } else {
-      alert(`This ${name} already exists!`);
+      Notiflix.Notify.failure(`This name ${name} already exists!`);
+      setIsLoading(false);
+
+      return;
     }
   };
 
@@ -30,6 +37,8 @@ const Form = () => {
     evt.preventDefault();
     const id = nanoid();
     addNewContact(id, name, phone);
+    setName('');
+    setPhone('');
   };
 
   const onInputChange = evt => {
@@ -66,7 +75,9 @@ const Form = () => {
           onChange={onInputChange}
         />
       </Label>
-      <AddContactBtn type="submit">Add contact</AddContactBtn>
+      <AddContactBtn type="submit">
+        {isLoading ? <AddButtonLoader /> : 'Add contact'}
+      </AddContactBtn>
     </FormBody>
   );
 };
