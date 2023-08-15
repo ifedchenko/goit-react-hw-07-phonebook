@@ -4,7 +4,7 @@ import Notiflix from 'notiflix';
 import { deleteContact, fetchContacts } from '../../redux/operations';
 import { getContacts, getFilter } from '../../redux/selectors';
 import { DeleteButton, List, ListItem, P } from './Contact.styled';
-import { Loader, DeleteButtonLoader } from 'components/Loader/Loader';
+import { Loader, ButtonLoader } from 'components/Loader/Loader';
 
 const Contact = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +42,7 @@ const Contact = () => {
   return (
     <>
       {isPageDidMount ? (
-        <Loader />
+        <Loader height="80" width="80" />
       ) : (
         <List>
           {contacts
@@ -57,7 +57,11 @@ const Contact = () => {
                     type="button"
                     onClick={() => handleDeleteContact(id)}
                   >
-                    {isLoading[id] ? <DeleteButtonLoader /> : 'Delete'}
+                    {isLoading[id] ? (
+                      <ButtonLoader height="18" width="18" />
+                    ) : (
+                      'Delete'
+                    )}
                   </DeleteButton>
                 </P>
               </ListItem>

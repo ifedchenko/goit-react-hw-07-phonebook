@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { nanoid } from 'nanoid';
 import Notiflix from 'notiflix';
 import { addContact } from '../../redux/operations';
 import { getContacts } from '../../redux/selectors';
 import { FormBody, Label, Input, AddContactBtn } from './Form.styled';
-import { AddButtonLoader } from 'components/Loader/Loader';
+import { ButtonLoader } from 'components/Loader/Loader';
 
 const Form = () => {
   const [name, setName] = useState('');
@@ -14,38 +13,43 @@ const Form = () => {
   const dispatch = useDispatch();
   const contactsStorage = useSelector(getContacts);
 
-  const addNewContact = (id, name, phone) => {
-    setIsLoading(true);
+  const addNewContact = (name, phone) => {
     const isContactExist = contactsStorage.some(
       contact => contact.name.toLowerCase() === name.toLowerCase()
     );
+
     if (!isContactExist) {
-      dispatch(addContact({ id, name, phone }));
-      Notiflix.Notify.success(`You added contact wit name "${name}"`);
-      setIsLoading(false);
+      setIsLoading(true);
 
-      return;
+      // const id = nanoid();
+      dispatch(addContact({ name, phone }))
+        .then(() => {
+          Notiflix.Notify.success(`You added contact with name "${name}"`);
+          setName('');
+          setPhone('');
+        })
+        .catch(error => {
+          console.log('Error:', error);
+          Notiflix.Notify.failure('Contact could not be added');
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     } else {
-      Notiflix.Notify.failure(`This name ${name} already exists!`);
-      setIsLoading(false);
-
-      return;
+      Notiflix.Notify.failure(`The name "${name}" already exists!`);
     }
   };
 
   const submitHandler = evt => {
     evt.preventDefault();
-    const id = nanoid();
-    addNewContact(id, name, phone);
-    setName('');
-    setPhone('');
+    addNewContact(name, phone);
   };
 
   const onInputChange = evt => {
     const { name, value } = evt.target;
     if (name === 'name') {
       setName(value);
-    } else if (name === 'number') {
+    } else if (name === 'phone') {
       setPhone(value);
     }
   };
@@ -68,7 +72,7 @@ const Form = () => {
         Number
         <Input
           type="tel"
-          name="number"
+          name="phone"
           value={phone.trim()}
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
@@ -76,7 +80,7 @@ const Form = () => {
         />
       </Label>
       <AddContactBtn type="submit">
-        {isLoading ? <AddButtonLoader /> : 'Add contact'}
+        {isLoading ? <ButtonLoader height="18" width="18" /> : 'Add contact'}
       </AddContactBtn>
     </FormBody>
   );

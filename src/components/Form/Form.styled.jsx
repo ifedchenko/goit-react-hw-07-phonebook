@@ -22,5 +22,6 @@ export const Input = styled.input`
 export const AddContactBtn = styled.button`
   margin-top: 20px;
   width: 100px;
+  height: 22px;
   cursor: pointer;
 `;

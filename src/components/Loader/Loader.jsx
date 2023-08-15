@@ -2,13 +2,13 @@ import React from 'react';
 import { ColorRing } from 'react-loader-spinner';
 import css from './Loader.module.css';
 
-export const AddButtonLoader = () => {
+export const ButtonLoader = ({ height, width }) => {
   return (
     <div className={css.SpinnerButton}>
       <ColorRing
         visible={true}
-        height="16"
-        width="16"
+        height={height}
+        width={width}
         ariaLabel="blocks-loading"
         wrapperStyle={{}}
         wrapperClass="blocks-wrapper"
@@ -18,29 +18,13 @@ export const AddButtonLoader = () => {
   );
 };
 
-export const DeleteButtonLoader = () => {
-  return (
-    <div className={css.SpinnerButton}>
-      <ColorRing
-        visible={true}
-        height="16"
-        width="16"
-        ariaLabel="blocks-loading"
-        wrapperStyle={{}}
-        wrapperClass="blocks-wrapper"
-        colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
-      />
-    </div>
-  );
-};
-
-export const Loader = () => {
+export const Loader = ({ height, width }) => {
   return (
     <div className={css.Spinner}>
       <ColorRing
         visible={true}
-        height="80"
-        width="80"
+        height={height}
+        width={width}
         ariaLabel="blocks-loading"
         wrapperStyle={{}}
         wrapperClass="blocks-wrapper"
